@@ -114,8 +114,8 @@ def interpret_human_timedelta(timedelta_str: str) -> timedelta:
     datetime.timedelta(days=5)
     >>> interpret_human_timedelta("1h")
     datetime.timedelta(seconds=3600)
-    >>> interpret_human_timedelta("5m")
-    datetime.timedelta(seconds=300)
+    >>> interpret_human_timedelta("15m")
+    datetime.timedelta(seconds=900)
 
     """
     match = re.match(
