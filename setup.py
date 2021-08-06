@@ -22,7 +22,7 @@ setup(
         "pydantic",
         "python-dateutil",
     ],
-    entry_points={"console_scripts": ["polycal=polycal.cli:cli"]},
+    entry_points={"console_scripts": ["polycal=polycal.cli:main"]},
     keywords=["calendar"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
