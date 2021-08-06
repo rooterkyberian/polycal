@@ -55,6 +55,19 @@ class SetAttr(Transform):
 
 
 @register
+class SkipByTitle(Transform):
+    def __init__(self, titles: list[str]):
+        self.titles = set(titles)
+
+    def process(
+        self, events: Generator[Event, None, None]
+    ) -> Generator[Event, None, None]:
+        for event in events:
+            if event.title not in self.titles:
+                yield event
+
+
+@register
 class Merge(Transform):
     """Merge events with the same title and overlapping time ranges."""
 
@@ -106,7 +119,7 @@ def interpret_human_timedelta(timedelta_str: str) -> timedelta:
 
     """
     match = re.match(
-        r"(?P<num>\d)+(?P<spec>[dhms])?",
+        r"(?P<num>\d+)(?P<spec>[dhms])?",
         timedelta_str,
     )
     if match:

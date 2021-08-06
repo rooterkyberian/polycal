@@ -20,7 +20,7 @@ def cli(
 
     now = datetime.datetime.utcnow()
     start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    end = start + relativedelta.relativedelta(months=1)
+    end = start + relativedelta.relativedelta(months=3)
     processor.process(start=start, end=end)
 
 

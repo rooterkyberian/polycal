@@ -20,7 +20,7 @@ class BaseModel(pydantic.BaseModel):
 
 class TransformModel(BaseModel):
     type: str
-    kwargs: Optional[dict[str, Union[bool, int, str]]] = None
+    kwargs: Optional[dict[str, Union[bool, int, str, list[str]]]] = None
 
 
 class SourceModel(BaseModel):
