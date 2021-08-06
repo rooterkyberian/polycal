@@ -1,7 +1,44 @@
 # polycal
 
 Google calendar aggregation tool.
-Goal is to synchronize events from multiple calendars into one.
+
+Synchronize events from multiple calendars into one.
+
+**One-way** synchronization only! don't expect edits of target calendar to be synchronized back - in fact they will get overwritten during next sync.
+
+## Example config
+
+`./.polycal/polycal`
+
+```
+sources:
+  - id: example@gmail.com
+    transforms:
+      - type: SkipByTitle
+        kwargs:
+          titles:
+            - "Not important"
+  - id: workemail@example.com
+    transforms:
+      - type: ReplaceTitle
+        kwargs:
+          repl: "work"
+      - type: Merge
+        kwargs:
+          elipsis: "15m"
+  - id: 123@group.calendar.google.com
+    transforms:
+      - type: ReplaceTitle
+        kwargs:
+          pattern: "^(.*)$"
+          repl: 'Other|\1'
+      - type: SetAttr
+        kwargs:
+          busy: !!bool false
+
+target:
+  id: target123@group.calendar.google.com
+```
 
 ## Configuring Google OAuth2
 
