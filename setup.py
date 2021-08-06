@@ -21,6 +21,7 @@ setup(
         "google-auth-oauthlib",
         "pydantic",
         "python-dateutil",
+        "pyyaml",
     ],
     entry_points={"console_scripts": ["polycal=polycal.cli:main"]},
     keywords=["calendar"],
