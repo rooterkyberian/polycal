@@ -4,7 +4,7 @@ import hashlib
 import itertools
 import json
 import time
-from typing import Generator, Optional, Union
+from typing import Generator, Iterable, Optional, Union
 
 import pydantic
 
@@ -18,15 +18,21 @@ class BaseModel(pydantic.BaseModel):
         extra = "forbid"
 
 
+class FilterModel(BaseModel):
+    type: str
+    kwargs: Optional[dict[str, Union[bool, int, str, list[str]]]] = None
+
+
 class TransformModel(BaseModel):
     type: str
     kwargs: Optional[dict[str, Union[bool, int, str, list[str]]]] = None
+    filters: list[FilterModel] = []
 
 
 class SourceModel(BaseModel):
     id: str
     name: Optional[str]
-    transforms: list[TransformModel] = ()
+    transforms: list[TransformModel] = []
 
 
 class TargetModel(BaseModel):
@@ -97,7 +103,8 @@ def pydantic_hash(obj: pydantic.BaseModel) -> str:
     return base64.b85encode(
         hashlib.blake2s(
             json.dumps(
-                obj.json(exclude={"sequence", "source_ids"}), sort_keys=True
+                obj.json(exclude={"sequence", "source_ids", "attendees"}),
+                sort_keys=True,
             ).encode("utf-8")
         ).digest()
     ).decode()

@@ -9,7 +9,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-from polycal.types import Event
+from polycal.types import Attendee, Event
 
 LOG = logging.getLogger(__name__)
 
@@ -90,7 +90,7 @@ class ExtendedProperties(TypedDict):
     shared: dict[str, str]
 
 
-class Attendee(GooglePerson, total=False):
+class GoogleAttendee(GooglePerson, total=False):
     organizer: bool
     resource: bool
     optional: bool
@@ -127,6 +127,7 @@ class GoogleCalendarEvent(TypedDict, total=False):
     privateCopy: bool
     locked: bool
     eventType: str
+    attendees: list[GoogleAttendee]
 
 
 class GoogleCalendarService:
@@ -204,6 +205,10 @@ class GoogleCalendarService:
             deleted=google_event.get("status") == "cancelled",
             location=google_event.get("location"),
             busy=google_event.get("transparency", "opaque") == "opaque",
+            attendees=[
+                Attendee(email=attendee["email"], status=attendee.get("responseStatus"))
+                for attendee in google_event.get("attendees", [])
+            ],
         )
 
     def _event_to_gevent(self, event: Event) -> GoogleCalendarEvent:

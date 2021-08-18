@@ -5,7 +5,7 @@ from collections import defaultdict
 from datetime import timedelta
 from typing import Generator, Optional, Type, Union
 
-from polycal.types import Event
+from polycal.types import AttendeeRSVP, Event
 
 
 class Transform:
@@ -64,6 +64,37 @@ class SkipByTitle(Transform):
     ) -> Generator[Event, None, None]:
         for event in events:
             if event.title not in self.titles:
+                yield event
+
+
+@register
+class SkipByAttendee(Transform):
+    def __init__(self, email: str, confirmed: bool = False):
+        self.email = email
+        self.confirmed = confirmed
+
+    def process(
+        self, events: Generator[Event, None, None]
+    ) -> Generator[Event, None, None]:
+        for event in events:
+            if not any(
+                attendee.email == self.email
+                and (not self.confirmed or attendee.status == AttendeeRSVP.accepted)
+                for attendee in event.attendees
+            ):
+                yield event
+
+
+@register
+class SkipByDuration(Transform):
+    def __init__(self, min_duration: str):
+        self.min_duration = interpret_human_timedelta(min_duration)
+
+    def process(
+        self, events: Generator[Event, None, None]
+    ) -> Generator[Event, None, None]:
+        for event in events:
+            if event.duration > self.min_duration:
                 yield event
 
 
