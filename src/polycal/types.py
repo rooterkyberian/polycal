@@ -24,6 +24,7 @@ class Event(pydantic.BaseModel):
     source_ids: list[str]
     start: Union[datetime.datetime, datetime.date]
     end: Union[datetime.datetime, datetime.date]
+    type: str = "default"
     title: Optional[str] = None
     description: Optional[str] = None
     location: Optional[str] = None

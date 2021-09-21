@@ -201,6 +201,7 @@ class GoogleCalendarService:
             sequence=google_event.get("sequence", 0),
             start=from_google_cal_date(google_event["start"]),
             end=from_google_cal_date(google_event["end"]),
+            type=google_event.get("eventType"),
             title=google_event.get("summary"),
             deleted=google_event.get("status") == "cancelled",
             location=google_event.get("location"),
@@ -221,6 +222,7 @@ class GoogleCalendarService:
             "status": "cancelled" if event.deleted else "confirmed",
             "location": event.location,
             "transparency": "opaque" if event.busy else "transparent",
+            "eventType": event.type,
         }
 
     def sync_events(self, calendar_id: str, sync_events: Iterable[Event]):

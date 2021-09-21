@@ -55,6 +55,22 @@ class SetAttr(Transform):
 
 
 @register
+class SkipByAttr(Transform):
+    def __init__(self, **skip_by):
+        self.skip_by = skip_by
+
+    def process(
+        self, events: Generator[Event, None, None]
+    ) -> Generator[Event, None, None]:
+        for event in events:
+            if not all(
+                getattr(event, attr_name) == value
+                for attr_name, value in self.skip_by.items()
+            ):
+                yield event
+
+
+@register
 class SkipByTitle(Transform):
     def __init__(self, titles: list[str]):
         self.titles = set(titles)
