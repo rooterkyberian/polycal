@@ -73,13 +73,13 @@ class SkipByAttr(Transform):
 @register
 class SkipByTitle(Transform):
     def __init__(self, titles: list[str]):
-        self.titles = set(titles)
+        self.patterns = [re.compile(title) for title in titles]
 
     def process(
         self, events: Generator[Event, None, None]
     ) -> Generator[Event, None, None]:
         for event in events:
-            if event.title not in self.titles:
+            if not any(pattern.match(event.title) for pattern in self.patterns):
                 yield event
 
 
