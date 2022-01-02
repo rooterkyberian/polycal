@@ -64,10 +64,20 @@ class SkipByAttr(Transform):
     ) -> Generator[Event, None, None]:
         for event in events:
             if not all(
-                getattr(event, attr_name) == value
+                self.getattr_by_path(event, attr_name) == value
                 for attr_name, value in self.skip_by.items()
             ):
                 yield event
+
+    @staticmethod
+    def getattr_by_path(value, path: str):
+        path_splitted = path.split(".")
+        for attr in path_splitted:
+            if isinstance(value, dict):
+                value = value.get(attr)
+            else:
+                value = getattr(value, attr)
+        return value
 
 
 @register

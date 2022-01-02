@@ -196,6 +196,7 @@ class GoogleCalendarService:
         if not uid.endswith("@polycal"):
             uid = f"{google_event['id']}@polycal"
         return Event(
+            src=google_event,
             source_ids=[google_event["id"]],
             iCalUID=uid,
             sequence=google_event.get("sequence", 0),

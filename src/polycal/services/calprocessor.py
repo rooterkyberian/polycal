@@ -103,7 +103,7 @@ def pydantic_hash(obj: pydantic.BaseModel) -> str:
     return base64.b85encode(
         hashlib.blake2s(
             json.dumps(
-                obj.json(exclude={"sequence", "source_ids", "attendees"}),
+                obj.json(exclude={"sequence", "source_ids", "attendees", "src"}),
                 sort_keys=True,
             ).encode("utf-8")
         ).digest()

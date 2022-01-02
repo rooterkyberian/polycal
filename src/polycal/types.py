@@ -1,6 +1,6 @@
 import datetime
 import enum
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 import pydantic
 
@@ -19,6 +19,7 @@ class Attendee(pydantic.BaseModel):
 
 
 class Event(pydantic.BaseModel):
+    src: Any
     iCalUID: pydantic.constr(max_length=255)
     sequence: int = 0
     source_ids: list[str]
